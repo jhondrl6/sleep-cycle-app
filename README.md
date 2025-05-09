@@ -13,4 +13,4 @@ Una app web simple y responsiva que te ayuda a calcular las mejores horas para a
 
 1. Clona este repositorio o descárgalo como ZIP:
    ```bash
-   git clone https://github.com/<jhondrl6>/sleep-cycle-app.git
+   git clone https://github.com/jhondrl6/sleep-cycle-app.git
