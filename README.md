@@ -1,16 +1,19 @@
-# Sleep Cycle Calculator
+# Sleep Cycle Calculator v2
 
-Una app web simple y responsiva que te ayuda a calcular las mejores horas para acostarte según la hora en que deseas despertarte, basada en ciclos de sueño de 90 minutos.
+Una app web mejorada para calcular ciclos de sueño. Ahora puedes:
 
-## 🌙 Características
+- Saber a qué hora dormirte según tu hora deseada para despertar.
+- Calcular a qué hora despertarte si ya sabes a qué hora vas a dormirte.
+- Personalizar los minutos que tardas en dormir.
+- Disfrutar un diseño visual más relajante con colores tipo puesta de sol.
 
-- Interfaz en modo oscuro, amigable para usar de noche.
-- Introduce tu hora deseada de despertarte.
-- Elige cuántos minutos tardas en dormirte (10, 15 o 20 min).
-- Muestra las mejores horas para acostarte (de 3 a 6 ciclos de sueño).
+## 🧠 Tecnologías
 
-## ✨ Cómo usar esta app
+- HTML
+- CSS (modo oscuro + naranja tipo sunset)
+- JavaScript
 
-1. Clona este repositorio o descárgalo como ZIP:
-   ```bash
-   git clone https://github.com/jhondrl6/sleep-cycle-app.git
+## ✅ ¿Cómo usar esta app?
+
+1. Abre `index.html` en tu navegador local.
+2. O visita la app publicada en GitHub Pages:
