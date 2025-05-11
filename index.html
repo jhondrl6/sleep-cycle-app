@@ -2,9 +2,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calculadora de Ciclos de Sueño</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Ciclos de Sueño v2</title>
   <style>
     body {
       background-color: #121212;
@@ -13,13 +13,12 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 100vh;
-      margin: 0;
-      padding: 1rem;
+      justify-content: start;
+      min-height: 100vh;
+      padding: 2rem;
     }
     h1 {
-      color: #bb86fc;
+      color: #ffb347;
     }
     label, input, select, button {
       margin: 0.5rem 0;
@@ -31,12 +30,13 @@
       border-radius: 5px;
     }
     button {
-      background-color: #bb86fc;
+      background-color: #ffb347;
       color: #121212;
       border: none;
       padding: 0.5rem 1rem;
       border-radius: 5px;
       cursor: pointer;
+      margin-top: 0.5rem;
     }
     ul {
       list-style: none;
@@ -45,30 +45,46 @@
     li {
       margin: 0.3rem 0;
     }
+    .section {
+      margin-bottom: 2rem;
+      width: 100%;
+      max-width: 400px;
+    }
   </style>
 </head>
 <body>
-  <h1>Calculadora de Ciclos de Sueño</h1>
-  <label for="wakeTime">Hora de despertarte:</label>
-  <input type="time" id="wakeTime" required />
+  <h1>Calculadora de Ciclos de Sueño v2</h1>
 
-  <label for="fallAsleep">Minutos para dormirte:</label>
-  <select id="fallAsleep">
-    <option value="15">15 min</option>
-    <option value="10">10 min</option>
-    <option value="20">20 min</option>
-  </select>
+  <div class="section">
+    <h2>Si quieres despertarte a cierta hora:</h2>
+    <label for="wakeTime">Hora para despertarte:</label>
+    <input type="time" id="wakeTime" />
 
-  <button onclick="calcularHoras()">Calcular</button>
+    <label for="fallAsleep">Minutos para dormirte:</label>
+    <select id="fallAsleep">
+      <option value="15">15 min</option>
+      <option value="10">10 min</option>
+      <option value="20">20 min</option>
+    </select>
 
-  <h2>Horas recomendadas para dormirte:</h2>
-  <ul id="resultados"></ul>
+    <button onclick="calcularHorasDormir()">¿A qué hora debo dormirme?</button>
+    <ul id="resultadoDormir"></ul>
+  </div>
+
+  <div class="section">
+    <h2>Si ya sabes a qué hora te dormirás:</h2>
+    <label for="sleepTime">Hora para dormirte:</label>
+    <input type="time" id="sleepTime" />
+
+    <button onclick="calcularHorasDespertar()">¿A qué hora debo despertarme?</button>
+    <ul id="resultadoDespertar"></ul>
+  </div>
 
   <script>
-    function calcularHoras() {
+    function calcularHorasDormir() {
       const wakeTime = document.getElementById('wakeTime').value;
       const fallAsleepMinutes = parseInt(document.getElementById('fallAsleep').value);
-      const resultados = document.getElementById('resultados');
+      const resultados = document.getElementById('resultadoDormir');
       resultados.innerHTML = '';
 
       if (!wakeTime) {
@@ -81,12 +97,37 @@
       wakeDate.setHours(wakeHour, wakeMin, 0);
 
       const ciclos = [6, 5, 4, 3];
-
       ciclos.forEach(c => {
         const totalMin = c * 90 + fallAsleepMinutes;
         const sleepTime = new Date(wakeDate.getTime() - totalMin * 60000);
         const hours = sleepTime.getHours().toString().padStart(2, '0');
         const minutes = sleepTime.getMinutes().toString().padStart(2, '0');
+        const li = document.createElement('li');
+        li.textContent = `${hours}:${minutes} (${c} ciclos)`;
+        resultados.appendChild(li);
+      });
+    }
+
+    function calcularHorasDespertar() {
+      const sleepTime = document.getElementById('sleepTime').value;
+      const resultados = document.getElementById('resultadoDespertar');
+      resultados.innerHTML = '';
+
+      if (!sleepTime) {
+        alert('Por favor ingresa una hora para dormirte.');
+        return;
+      }
+
+      const [sleepHour, sleepMin] = sleepTime.split(":").map(Number);
+      const sleepDate = new Date();
+      sleepDate.setHours(sleepHour, sleepMin, 0);
+
+      const ciclos = [3, 4, 5, 6];
+      ciclos.forEach(c => {
+        const totalMin = c * 90;
+        const wakeTime = new Date(sleepDate.getTime() + totalMin * 60000);
+        const hours = wakeTime.getHours().toString().padStart(2, '0');
+        const minutes = wakeTime.getMinutes().toString().padStart(2, '0');
         const li = document.createElement('li');
         li.textContent = `${hours}:${minutes} (${c} ciclos)`;
         resultados.appendChild(li);
