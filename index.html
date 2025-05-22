@@ -1,138 +1,64 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calculadora de Ciclos de Sueño v2</title>
-  <style>
-    body {
-      background-color: #121212;
-      color: #ffffff;
-      font-family: 'Segoe UI', sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: start;
-      min-height: 100vh;
-      padding: 2rem;
-    }
-    h1 {
-      color: #ffb347;
-    }
-    label, input, select, button {
-      margin: 0.5rem 0;
-      font-size: 1rem;
-    }
-    input, select {
-      padding: 0.4rem;
-      border: none;
-      border-radius: 5px;
-    }
-    button {
-      background-color: #ffb347;
-      color: #121212;
-      border: none;
-      padding: 0.5rem 1rem;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-top: 0.5rem;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-    }
-    li {
-      margin: 0.3rem 0;
-    }
-    .section {
-      margin-bottom: 2rem;
-      width: 100%;
-      max-width: 400px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historial de Glucosa</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Calculadora de Ciclos de Sueño v2</h1>
+    <h1>Registro de Glucosa</h1>
 
-  <div class="section">
-    <h2>Si quieres despertarte a cierta hora:</h2>
-    <label for="wakeTime">Hora para despertarte:</label>
-    <input type="time" id="wakeTime" />
+    <section>
+        <h2>Agregar Nueva Medición</h2>
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha">
 
-    <label for="fallAsleep">Minutos para dormirte:</label>
-    <select id="fallAsleep">
-      <option value="15">15 min</option>
-      <option value="10">10 min</option>
-      <option value="20">20 min</option>
-    </select>
+        <label for="hora">Hora:</label>
+        <input type="time" id="hora">
 
-    <button onclick="calcularHorasDormir()">¿A qué hora debo dormirme?</button>
-    <ul id="resultadoDormir"></ul>
-  </div>
+        <label for="valorGlucosa">Valor de Glucosa:</label>
+        <input type="number" id="valorGlucosa" placeholder="mg/dL">
 
-  <div class="section">
-    <h2>Si ya sabes a qué hora te dormirás:</h2>
-    <label for="sleepTime">Hora para dormirte:</label>
-    <input type="time" id="sleepTime" />
+        <label for="observaciones">Observaciones:</label>
+        <textarea id="observaciones" placeholder="Ej: después del desayuno"></textarea>
 
-    <button onclick="calcularHorasDespertar()">¿A qué hora debo despertarme?</button>
-    <ul id="resultadoDespertar"></ul>
-  </div>
+        <button id="btnAgregar">Agregar Medición</button>
+    </section>
 
-  <script>
-    function calcularHorasDormir() {
-      const wakeTime = document.getElementById('wakeTime').value;
-      const fallAsleepMinutes = parseInt(document.getElementById('fallAsleep').value);
-      const resultados = document.getElementById('resultadoDormir');
-      resultados.innerHTML = '';
+    <section>
+        <h2>Historial de Mediciones</h2>
+        <table id="historialTabla">
+            <thead>
+                <tr>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Valor (mg/dL)</th>
+                    <th>Observaciones</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="historialTablaBody">
+                <!-- Las mediciones se agregarán aquí -->
+            </tbody>
+        </table>
+    </section>
 
-      if (!wakeTime) {
-        alert('Por favor ingresa una hora para despertarte.');
-        return;
-      }
+    <section>
+        <h2>Calcular Promedios</h2>
+        <label for="fechaInicioPromedio">Desde:</label>
+        <input type="date" id="fechaInicioPromedio">
 
-      const [wakeHour, wakeMin] = wakeTime.split(":").map(Number);
-      const wakeDate = new Date();
-      wakeDate.setHours(wakeHour, wakeMin, 0);
+        <label for="fechaFinPromedio">Hasta:</label>
+        <input type="date" id="fechaFinPromedio">
 
-      const ciclos = [6, 5, 4, 3];
-      ciclos.forEach(c => {
-        const totalMin = c * 90 + fallAsleepMinutes;
-        const sleepTime = new Date(wakeDate.getTime() - totalMin * 60000);
-        const hours = sleepTime.getHours().toString().padStart(2, '0');
-        const minutes = sleepTime.getMinutes().toString().padStart(2, '0');
-        const li = document.createElement('li');
-        li.textContent = `${hours}:${minutes} (${c} ciclos)`;
-        resultados.appendChild(li);
-      });
-    }
+        <button id="btnPromedioRango">Promedio Rango Específico</button>
+        <button id="btnPromedioUltimaSemana">Promedio Última Semana</button>
+        <button id="btnPromedioUltimasDosSemanas">Promedio Últimas Dos Semanas</button>
 
-    function calcularHorasDespertar() {
-      const sleepTime = document.getElementById('sleepTime').value;
-      const resultados = document.getElementById('resultadoDespertar');
-      resultados.innerHTML = '';
+        <div id="resultadoPromedio">El promedio aparecerá aquí.</div>
+    </section>
 
-      if (!sleepTime) {
-        alert('Por favor ingresa una hora para dormirte.');
-        return;
-      }
-
-      const [sleepHour, sleepMin] = sleepTime.split(":").map(Number);
-      const sleepDate = new Date();
-      sleepDate.setHours(sleepHour, sleepMin, 0);
-
-      const ciclos = [3, 4, 5, 6];
-      ciclos.forEach(c => {
-        const totalMin = c * 90;
-        const wakeTime = new Date(sleepDate.getTime() + totalMin * 60000);
-        const hours = wakeTime.getHours().toString().padStart(2, '0');
-        const minutes = wakeTime.getMinutes().toString().padStart(2, '0');
-        const li = document.createElement('li');
-        li.textContent = `${hours}:${minutes} (${c} ciclos)`;
-        resultados.appendChild(li);
-      });
-    }
-  </script>
+    <script src="script.js"></script>
 </body>
 </html>
