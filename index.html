@@ -56,6 +56,34 @@
         <button id="btnPromedioUltimaSemana">Promedio Última Semana</button>
         <button id="btnPromedioUltimasDosSemanas">Promedio Últimas Dos Semanas</button>
 
+        <hr>
+
+        <div>
+            <label for="fechasEspecificasInput">Fechas Específicas (YYYY-MM-DD, separadas por coma):</label>
+            <input type="text" id="fechasEspecificasInput">
+            <button id="btnPromedioFechasEspecificas">Promedio Fechas Específicas</button>
+            <div id="resultadoPromedioFechasEspecificas">El promedio de fechas específicas aparecerá aquí.</div>
+        </div>
+
+        <hr>
+
+        <div>
+            <label for="diaSemanaSelect">Día de la Semana Específico:</label>
+            <select id="diaSemanaSelect">
+                <option value="1">Lunes</option>
+                <option value="2">Martes</option>
+                <option value="3">Miércoles</option>
+                <option value="4">Jueves</option>
+                <option value="5">Viernes</option>
+                <option value="6">Sábado</option>
+                <option value="0">Domingo</option>
+            </select>
+            <button id="btnPromedioDiaSemana">Promedio Día de la Semana</button>
+            <div id="resultadoPromedioDiaSemana">El promedio del día de la semana aparecerá aquí.</div>
+        </div>
+
+        <hr>
+
         <div id="resultadoPromedio">El promedio aparecerá aquí.</div>
     </section>
 

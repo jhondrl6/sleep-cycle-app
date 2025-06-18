@@ -16,6 +16,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const fechaInicioPromedioInput = document.getElementById('fechaInicioPromedio');
     const fechaFinPromedioInput = document.getElementById('fechaFinPromedio');
 
+    // New DOM element references for specific dates and day of the week
+    const fechasEspecificasInput = document.getElementById('fechasEspecificasInput');
+    const btnPromedioFechasEspecificas = document.getElementById('btnPromedioFechasEspecificas');
+    const resultadoPromedioFechasEspecificasDiv = document.getElementById('resultadoPromedioFechasEspecificas');
+    const diaSemanaSelect = document.getElementById('diaSemanaSelect');
+    const btnPromedioDiaSemana = document.getElementById('btnPromedioDiaSemana');
+    const resultadoPromedioDiaSemanaDiv = document.getElementById('resultadoPromedioDiaSemana');
+
     let mediciones = []; // Array to hold measurements
 
     // 2. Data Storage (localStorage)
@@ -138,9 +146,22 @@ document.addEventListener('DOMContentLoaded', () => {
         return new Date(year, month - 1, day); // Month is 0-indexed
     }
 
-    function calcularYMostrarPromedio(medicionesFiltradas) {
+    // More flexible function to display results
+    function mostrarResultado(divElement, medicionesFiltradas, tipoPromedioStr) {
         if (medicionesFiltradas.length === 0) {
-            resultadoPromedioDiv.textContent = 'No hay mediciones en el período seleccionado.';
+            divElement.textContent = `No hay mediciones para ${tipoPromedioStr}.`;
+            return;
+        }
+
+        const sumaValores = medicionesFiltradas.reduce((sum, med) => sum + med.valor, 0);
+        const promedio = sumaValores / medicionesFiltradas.length;
+        divElement.textContent = `Promedio (${tipoPromedioStr}): ${promedio.toFixed(2)} mg/dL (${medicionesFiltradas.length} mediciones).`;
+    }
+
+    // Function to use the old div for existing average functions
+    function calcularYMostrarPromedio(medicionesFiltradas, tipoPromedioStr = "el período seleccionado") {
+        if (medicionesFiltradas.length === 0) {
+            resultadoPromedioDiv.textContent = `No hay mediciones en ${tipoPromedioStr}.`;
             return;
         }
 
@@ -148,6 +169,54 @@ document.addEventListener('DOMContentLoaded', () => {
         const promedio = sumaValores / medicionesFiltradas.length;
         resultadoPromedioDiv.textContent = `Promedio: ${promedio.toFixed(2)} mg/dL (${medicionesFiltradas.length} mediciones)`;
     }
+
+
+    // New function for specific dates average
+    function calcularPromedioFechasEspecificas() {
+        const fechasStr = fechasEspecificasInput.value.trim();
+        if (!fechasStr) {
+            alert('Por favor, ingrese las fechas específicas.');
+            resultadoPromedioFechasEspecificasDiv.textContent = 'Ingrese fechas para calcular el promedio.';
+            return;
+        }
+
+        const fechasArray = fechasStr.split(',').map(f => f.trim());
+        const fechasValidas = [];
+        const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+
+        for (const fecha of fechasArray) {
+            if (!dateRegex.test(fecha)) {
+                alert(`Formato de fecha incorrecto: "${fecha}". Use YYYY-MM-DD.`);
+                resultadoPromedioFechasEspecificasDiv.textContent = `Formato de fecha incorrecto: "${fecha}".`;
+                return;
+            }
+            // Basic validation for date parts (does not check for valid day in month e.g. 2023-02-30)
+            const [year, month, day] = fecha.split('-').map(Number);
+            if (month < 1 || month > 12 || day < 1 || day > 31) {
+                 alert(`Fecha inválida: "${fecha}". Verifique mes y día.`);
+                 resultadoPromedioFechasEspecificasDiv.textContent = `Fecha inválida: "${fecha}".`;
+                 return;
+            }
+            fechasValidas.push(fecha);
+        }
+
+        const medicionesFiltradas = mediciones.filter(med => fechasValidas.includes(med.fecha));
+        mostrarResultado(resultadoPromedioFechasEspecificasDiv, medicionesFiltradas, "fechas específicas");
+    }
+
+    // New function for specific day of the week average
+    function calcularPromedioDiaSemanaEspecifico() {
+        const diaSeleccionado = parseInt(diaSemanaSelect.value, 10); // 0 for Sunday, 1 for Monday...
+
+        const medicionesFiltradas = mediciones.filter(med => {
+            const fechaMedicion = parseDate(med.fecha); // YYYY-MM-DD string to Date object
+            return fechaMedicion && fechaMedicion.getDay() === diaSeleccionado;
+        });
+
+        const nombreDia = diaSemanaSelect.options[diaSemanaSelect.selectedIndex].text;
+        mostrarResultado(resultadoPromedioDiaSemanaDiv, medicionesFiltradas, `los ${nombreDia}`);
+    }
+
 
     btnPromedioRango.addEventListener('click', () => {
         const fechaInicioStr = fechaInicioPromedioInput.value;
@@ -174,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return fechaMedicion >= fechaInicio && fechaMedicion <= fechaFin;
         });
 
-        calcularYMostrarPromedio(medicionesEnRango);
+        calcularYMostrarPromedio(medicionesEnRango, "el rango especificado");
     });
 
     btnPromedioUltimaSemana.addEventListener('click', () => {
@@ -190,7 +259,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const fechaMedicion = parseDate(med.fecha); // Use parseDate to compare only dates
             return fechaMedicion >= haceUnaSemana && fechaMedicion <= hoy;
         });
-        calcularYMostrarPromedio(medicionesUltimaSemana);
+        calcularYMostrarPromedio(medicionesUltimaSemana, "la última semana");
     });
 
     btnPromedioUltimasDosSemanas.addEventListener('click', () => {
@@ -205,8 +274,12 @@ document.addEventListener('DOMContentLoaded', () => {
             const fechaMedicion = parseDate(med.fecha); // Use parseDate to compare only dates
             return fechaMedicion >= haceDosSemanas && fechaMedicion <= hoy;
         });
-        calcularYMostrarPromedio(medicionesUltimasDosSemanas);
+        calcularYMostrarPromedio(medicionesUltimasDosSemanas, "las últimas dos semanas");
     });
+
+    // Add event listeners for new buttons
+    btnPromedioFechasEspecificas.addEventListener('click', calcularPromedioFechasEspecificas);
+    btnPromedioDiaSemana.addEventListener('click', calcularPromedioDiaSemanaEspecifico);
 
 
     // 6. Initial Setup
