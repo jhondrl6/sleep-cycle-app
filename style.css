@@ -1,0 +1,185 @@
+/* General Body Styling */
+body {
+    background-color: #222831; /* Dark background */
+    color: #EEEEEE; /* Light text */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px; /* Base font size for readability */
+    padding: 20px;
+    margin: 0;
+    line-height: 1.6;
+}
+
+/* Headings */
+h1, h2 {
+    color: #00ADB5; /* Accent color - light blue/teal */
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+h2 {
+    font-size: 1.8rem;
+    border-bottom: 1px solid #393E46;
+    padding-bottom: 10px;
+    margin-top: 30px;
+}
+
+/* Sections for grouping content */
+section {
+    background-color: #393E46; /* Slightly lighter dark shade for sections */
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Labels and Input Fields */
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #EEEEEE;
+}
+
+input[type="date"],
+input[type="time"],
+input[type="number"],
+textarea {
+    width: calc(100% - 22px); /* Full width minus padding and border */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #4F5B66; /* Visible border */
+    border-radius: 5px;
+    background-color: #222831; /* Dark input background */
+    color: #EEEEEE; /* Light text in input */
+    font-size: 1rem; /* Readable font size */
+    box-sizing: border-box; /* Ensures padding and border don't increase width */
+}
+
+input[type="number"]::placeholder,
+textarea::placeholder {
+    color: #AAAAAA; /* Lighter placeholder text */
+}
+
+textarea {
+    min-height: 80px;
+    resize: vertical; /* Allow vertical resizing */
+}
+
+/* Buttons */
+button {
+    background-color: #00ADB5; /* Accent color */
+    color: #FFFFFF; /* White text for contrast */
+    border: none;
+    padding: 12px 20px;
+    font-size: 1.1rem; /* Larger font size for buttons */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-right: 10px; /* Space between buttons */
+    margin-top: 10px; /* Space above buttons if they wrap */
+}
+
+button:hover {
+    background-color: #007A7F; /* Darker shade on hover */
+}
+
+button:active {
+    background-color: #005F63; /* Even darker on active/click */
+}
+
+/* Table Styling */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #4F5B66; /* Light gray border for cells */
+    padding: 12px; /* Ample padding */
+    text-align: left;
+    font-size: 1rem;
+}
+
+th {
+    background-color: #393E46; /* Header background slightly different */
+    color: #00ADB5; /* Accent color for header text */
+    font-weight: bold;
+}
+
+td button {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+    background-color: #d9534f; /* A distinct color for delete buttons, for example */
+}
+
+td button:hover {
+    background-color: #c9302c;
+}
+
+
+/* Specific Element Styling */
+#resultadoPromedio {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #222831; /* Dark background for the result */
+    border: 1px solid #00ADB5; /* Accent border */
+    border-radius: 5px;
+    font-size: 1.2rem; /* Larger font for the result */
+    color: #EEEEEE;
+    text-align: center;
+}
+
+/* Ensure inputs don't get too wide on very large screens, optional */
+input[type="date"],
+input[type="time"],
+input[type="number"],
+textarea {
+    max-width: 500px; /* Max width for input fields */
+}
+
+/* Styles for new UI elements */
+#fechasEspecificasInput,
+#diaSemanaSelect {
+    width: calc(100% - 22px); /* Full width minus padding and border */
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #4F5B66; /* Visible border */
+    border-radius: 5px;
+    background-color: #222831; /* Dark input background */
+    color: #EEEEEE; /* Light text in input */
+    font-size: 1rem; /* Readable font size */
+    box-sizing: border-box; /* Ensures padding and border don't increase width */
+    max-width: 500px; /* Max width for input fields */
+}
+
+/* Specific styling for select to ensure arrow is visible */
+#diaSemanaSelect {
+    appearance: menulist; /* Or auto, ensures default system styling for dropdown arrow */
+}
+
+#resultadoPromedioFechasEspecificas,
+#resultadoPromedioDiaSemana {
+    margin-top: 15px; /* Slightly less margin than the main one as they are sub-results */
+    padding: 12px;
+    background-color: #2a3038; /* Slightly different shade for distinction or same as #222831 */
+    border: 1px solid #00ADB5;
+    border-radius: 5px;
+    font-size: 1.1rem; /* Slightly smaller than main result */
+    color: #EEEEEE;
+    text-align: center;
+    margin-bottom: 20px; /* Space before next element or hr */
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background-color: #4F5B66; /* Similar to other border colors */
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
